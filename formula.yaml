@@ -1,0 +1,96 @@
+---
+tap:
+  - b4b4r07/gomi
+
+brew:
+  install:
+    - { name: gomi }
+    - { name: readline }
+    - { name: openssl }
+    - { name: ansible }
+    - { name: cmake }
+    - { name: ctags }
+    - { name: direnv }
+    - { name: docker }
+    - { name: git }
+    - { name: jq }
+    - { name: hub }
+    - { name: imagemagick }
+    - { name: mercurial }
+    - { name: pwgen }
+    - { name: python }
+    - { name: reattach-to-user-namespace }
+    - { name: the_silver_searcher }
+    - { name: tig }
+    - { name: tmux }
+    - { name: xz }
+    - { name: vim }
+    - { name: wget }
+    - { name: zsh, args: --disable-etcdir }
+    - { name: nkf }
+    - { name: libyaml }
+    - { name: ruby-build }
+    - { name: tree }
+    - { name: peco }
+    - { name: jbig2dec }
+    - { name: cscope }
+    - { name: ghr }
+    - { name: rbenv }
+    - { name: pkg-config }
+    - { name: ghostscript }
+    - { name: wdiff }
+    - { name: ack }
+    - { name: brew-cask }
+    - { name: go }
+    - { name: libpng }
+    - { name: figlet }
+    - { name: freetype }
+    - { name: shellcheck }
+    - { name: cowsay }
+    - { name: gmp }
+    - { name: jpeg }
+    - { name: w3m }
+    - { name: bdw-gc }
+    - { name: libtool }
+    - { name: gawk }
+    - { name: libevent }
+    - { name: groff }
+    - { name: libtiff }
+    - { name: terminal-notifier }
+    - { name: autoconf }
+
+cask:
+  install:
+    - atom
+    - calibre
+    - firefox
+    - google-chrome
+    - google-japanese-ime
+    - grandperspective
+    - hipchat
+    - iterm2
+    - java
+    - keepassx
+    - kindle
+    - mysqlworkbench
+    - skype
+    - spark
+    - vagrant
+    - virtualbox
+    - zeroxed atom
+    - calibre
+    - firefox
+    - google-chrome
+    - google-japanese-ime
+    - grandperspective
+    - hipchat
+    - iterm2
+    - java
+    - keepassx
+    - kindle
+    - mysqlworkbench
+    - skype
+    - spark
+    - vagrant
+    - virtualbox
+    - zeroxed
