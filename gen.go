@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"os"
 )
 
@@ -29,15 +30,6 @@ func gen() error {
 		return err
 	}
 
-	//list := make([]map[string]string, 0)
-	//m := make(map[string]string)
-
-	//for _, f := range installedFormula {
-	//	m["name"] = f
-	//	list = append(list, m)
-	//}
-	//fmt.Println(list)
-
 	fs := make([]Formula, len(installedFormula))
 	for i, f := range installedFormula {
 		fs[i].Name = f
@@ -52,7 +44,11 @@ func gen() error {
 	if err != nil {
 		return err
 	}
-	fmt.Print(string(c))
+
+	err = ioutil.WriteFile(formulaYaml, c, 0644)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
