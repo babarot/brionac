@@ -11,9 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
-
-	//"time"
+	//"strings"
 )
 
 type Brionac struct {
@@ -27,7 +25,7 @@ type Brew struct {
 
 type Formula struct {
 	Name string
-	Args string
+	Args []string
 }
 
 const formulaYaml = "formula.yaml"
@@ -74,28 +72,24 @@ func install() error {
 		run([]string{"brew", "tap", tap}, Blue)
 	}
 
-	var (
-		sc = 0
-		fc = 0
-	)
-	var success map[string]interface{} = map[string]interface{}{
-		"name":  []string{},
-		"count": 0,
-	}
-	var failure map[string]interface{} = map[string]interface{}{
-		"name":  []string{},
-		"count": 0,
-	}
-	_ = success
+	var failure []string
+	var success []string
 
 	var installFormula []Formula
 	for _, f := range d.Brew.Formula {
 		if alreadyInstalled(f.Name) {
-			sc++
+			failure = append(success, f.Name)
 		} else {
 			installFormula = append(installFormula, f)
 		}
 	}
+
+	barLength := 0
+	if state == "attack" {
+		barLength += len(installFormula)
+	}
+	bar := pb.StartNew(barLength)
+	bar.SetMaxWidth(80)
 
 	if len(installFormula) == 0 {
 		fmt.Fprintf(os.Stdout, "%d formulas are already installed.\n", len(d.Brew.Formula))
@@ -104,44 +98,36 @@ func install() error {
 		fmt.Fprintf(os.Stdout, "%d formulas installing...\n", len(d.Brew.Formula))
 	}
 
-	if verbose {
-		for _, brew := range installFormula {
-			var args []string
-			if brew.Args != "" {
-				args = strings.Split(brew.Args, " ")
-			}
-			if err := brew.Install(args); err != nil {
-				fc++
-				failure["name"] = append(failure["name"].([]string), brew.Name)
-			} else {
-				sc++
-			}
+	//if verbose {
+	//	for _, brew := range installFormula {
+	//		var args []string
+	//		if brew.Args != "" {
+	//			args = strings.Split(brew.Args, " ")
+	//		}
+	//		if err := brew.Install(args); err != nil {
+	//			fc++
+	//			failure["name"] = append(failure["name"].([]string), brew.Name)
+	//		} else {
+	//			sc++
+	//		}
+	//	}
+	//}
+	for _, brew := range installFormula {
+		bar.Increment()
+		if err := brew.Install(brew.Args); err != nil {
+			failure = append(failure, brew.Name)
+		} else {
+			failure = append(success, brew.Name)
 		}
-	} else {
-		bar := pb.StartNew(len(installFormula))
-		bar.SetMaxWidth(80)
-		for _, brew := range installFormula {
-			var args []string
-			if brew.Args != "" {
-				args = strings.Split(brew.Args, " ")
-			}
-			bar.Increment()
-			if err := brew.Install(args); err != nil {
-				fc++
-				failure["name"] = append(failure["name"].([]string), brew.Name)
-			} else {
-				sc++
-			}
-		}
-		bar.FinishPrint("complete processing!\n")
 	}
+	bar.FinishPrint("complete processing!\n")
 
 	fmt.Print(ansi.LightWhite)
-	fmt.Fprintf(os.Stdout, "success: %d    failure: %d\n", sc, fc)
+	fmt.Fprintf(os.Stdout, "success: %d    failure: %d\n", len(success), len(failure))
 	fmt.Print(ansi.Reset)
-	if len(failure["name"].([]string)) != 0 {
+	if len(failure) != 0 {
 		fmt.Print(ansi.Red)
-		fmt.Fprintf(os.Stdout, "errors: %q\n", failure["name"].([]string))
+		fmt.Fprintf(os.Stdout, "errors: %q\n", failure)
 		fmt.Fprintf(os.Stdout, "  You should run `brew install <errored_fourmula>'\n")
 		fmt.Print(ansi.Reset)
 	}
