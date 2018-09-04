@@ -66,6 +66,10 @@ The fact that you are interested in the Brionac shows that you are a homebrew us
 	$ brew tap b4b4r07/brionac
 	$ brew install brionac
 
+or use `go get`, if you using High Sierra.
+
+	$ go get -u github.com/b4b4r07/brionac
+	
 or go to the [releases page](Link), find the version you want, download the binary file, and put it in your `$PATH`
 
 ## Author
